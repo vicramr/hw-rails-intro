@@ -7,7 +7,16 @@ class MoviesController < ApplicationController
     end
   
     def index
-      @movies = Movie.all
+      if params['format'] == 'titlesort'
+        @movies = Movie.order('title')
+        @highlight = 'title' # Used by view to highlight correct cell
+      elsif params['format'] == 'releasedatesort'
+        @movies = Movie.order('release_date')
+        @highlight = 'release_date'
+      else
+        @movies = Movie.all
+        @highlight = nil
+      end
     end
   
     def new
