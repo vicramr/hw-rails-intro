@@ -3,6 +3,21 @@
 
 <%#  Part 2: Start here... %>
 
+<%# Used this to convert haml to erb: https://haml2erb.org/ %>
+<%= form_tag movies_path, :method => :get, :id => "ratings_form" %>
+  Include:
+  <% @all_ratings.each do |rating| %>
+    <%= rating %>
+    <%- if @prev_ratings_checked.include?(rating) %>
+      <%= check_box_tag "ratings[#{rating}]", checked=true, :id => "ratings[#{rating}]" %>
+    <%- else %>
+      <%= check_box_tag "ratings[#{rating}]", :id => "ratings[#{rating}]" %>
+    <%- end %>
+  <% end %>
+  <%= submit_tag 'Refresh', :class => 'btn btn-primary', :id => "ratings_submit" %>
+</form>
+
+
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>

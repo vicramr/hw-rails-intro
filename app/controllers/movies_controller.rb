@@ -7,14 +7,22 @@ class MoviesController < ApplicationController
     end
   
     def index
-      if params['format'] == 'titlesort'
+      @all_ratings = Movie.get_all_ratings # Initialization code
+      @prev_ratings_checked = Movie.get_all_ratings
+      if params['format'] == 'titlesort' # Part 1
         @movies = Movie.order('title')
         @highlight = 'title' # Used by view to highlight correct cell
-      elsif params['format'] == 'releasedatesort'
+      elsif params['format'] == 'releasedatesort' # Part 1
         @movies = Movie.order('release_date')
         @highlight = 'release_date'
       else
-        @movies = Movie.all
+        # Part 2
+        if params.has_key?('ratings')
+          @prev_ratings_checked = params['ratings'].keys
+        else
+          @prev_ratings_checked = Movie.get_all_ratings
+        end
+        @movies = Movie.with_ratings(@prev_ratings_checked)
         @highlight = nil
       end
     end
